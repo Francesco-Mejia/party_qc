@@ -19,7 +19,7 @@ interface BookingFormData {
   email: string;
   phone: string;
   numberOfTickets: number;
-  specialRequests: string;
+  musicalPreferences: string;
 }
 
 interface BookingFormErrors {
@@ -28,7 +28,7 @@ interface BookingFormErrors {
   email?: string;
   phone?: string;
   numberOfTickets?: string;
-  specialRequests?: string;
+  musicalPreferences?: string;
 }
 
 const BookingForm: React.FC = () => {
@@ -42,7 +42,7 @@ const BookingForm: React.FC = () => {
     email: '',
     phone: '',
     numberOfTickets: 1,
-    specialRequests: ''
+    musicalPreferences: ''
   });
   const [errors, setErrors] = useState<BookingFormErrors>({});
 
@@ -278,15 +278,16 @@ const BookingForm: React.FC = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="specialRequests">Demandes spéciales (optionnel)</label>
+                <label htmlFor="musicalPreferences">🎵 Choix musicaux (optionnel)</label>
                 <textarea
-                  id="specialRequests"
-                  name="specialRequests"
-                  value={formData.specialRequests}
+                  id="musicalPreferences"
+                  name="musicalPreferences"
+                  value={formData.musicalPreferences}
                   onChange={handleInputChange}
-                  rows={3}
-                  placeholder="Ex: Allergies alimentaires, accessibilité, etc."
+                  rows={4}
+                  placeholder="Ex: Reggaeton, House, Hip-Hop, Chansons préférées, Artistes favoris, etc. Nous ferons de notre mieux pour inclure vos préférences !"
                 />
+                <small className="help-text">Partagez vos genres musicaux préférés ou chansons que vous aimeriez entendre lors de l'événement</small>
               </div>
             </div>
 

@@ -15,6 +15,7 @@ interface BookingData {
   numberOfTickets: number;
   totalPrice: number;
   bookingDate: string;
+  musicalPreferences?: string;
 }
 
 const PaymentForm: React.FC = () => {
@@ -38,9 +39,9 @@ const PaymentForm: React.FC = () => {
     }
   }, [navigate]);
 
-  // Initialiser EmailJS (remplacez par vos propres clés)
+  // Initialiser EmailJS avec votre Public Key
   useEffect(() => {
-    init('YOUR_EMAILJS_USER_ID');
+    init(process.env.REACT_APP_EMAILJS_PUBLIC_KEY || '');
   }, []);
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -94,7 +95,13 @@ const PaymentForm: React.FC = () => {
 
   const sendEmailConfirmation = async (booking: BookingData) => {
     try {
-      // Template pour EmailJS (remplacez par vos propres IDs)
+      // Debug: Afficher les variables d'environnement
+      console.log('🔍 Debug EmailJS:');
+      console.log('Public Key:', process.env.REACT_APP_EMAILJS_PUBLIC_KEY);
+      console.log('Service ID:', process.env.REACT_APP_EMAILJS_SERVICE_ID);
+      console.log('Template ID:', process.env.REACT_APP_EMAILJS_TEMPLATE_ID);
+      
+      // Template pour EmailJS
       const templateParams = {
         to_email: booking.email,
         to_name: `${booking.firstName} ${booking.lastName}`,
@@ -103,19 +110,31 @@ const PaymentForm: React.FC = () => {
         number_of_tickets: booking.numberOfTickets,
         total_price: booking.totalPrice,
         booking_date: new Date(booking.bookingDate).toLocaleDateString('fr-CA'),
+        musical_preferences: booking.musicalPreferences || 'Aucune préférence spécifiée',
       };
 
+      console.log('📧 Template params:', templateParams);
+      console.log('Email du destinataire:', booking.email);
+
+      // Vérifier que toutes les variables sont présentes
+      if (!process.env.REACT_APP_EMAILJS_PUBLIC_KEY || 
+          !process.env.REACT_APP_EMAILJS_SERVICE_ID || 
+          !process.env.REACT_APP_EMAILJS_TEMPLATE_ID) {
+        throw new Error('Variables d\'environnement EmailJS manquantes');
+      }
+
       // Envoyer l'email de confirmation
-      await send(
-        'YOUR_EMAILJS_SERVICE_ID',
-        'YOUR_EMAILJS_TEMPLATE_ID',
+      const result = await send(
+        process.env.REACT_APP_EMAILJS_SERVICE_ID,
+        process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
         templateParams,
-        'YOUR_EMAILJS_PUBLIC_KEY'
+        process.env.REACT_APP_EMAILJS_PUBLIC_KEY
       );
 
-      console.log('Email de confirmation envoyé avec succès');
+      console.log('✅ Email de confirmation envoyé avec succès:', result);
     } catch (emailError) {
-      console.error('Erreur lors de l\'envoi de l\'email:', emailError);
+      console.error('❌ Erreur lors de l\'envoi de l\'email:', emailError);
+      console.error('Détails de l\'erreur:', emailError);
       // Ne pas bloquer le processus si l'email échoue
     }
   };

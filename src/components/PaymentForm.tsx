@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { init, send } from '@emailjs/browser';
 import './PaymentForm.css';
+import { bookingService } from '../services/bookingService';
 
 interface BookingData {
   id: string;
@@ -56,7 +57,6 @@ const PaymentForm: React.FC = () => {
 
     try {
       // Simuler le processus de paiement Stripe
-      // En production, vous devriez appeler votre backend pour créer un PaymentIntent
       const { error: stripeError, paymentMethod } = await stripe.createPaymentMethod({
         type: 'card',
         card: elements.getElement(CardElement)!,
@@ -74,6 +74,25 @@ const PaymentForm: React.FC = () => {
 
       // Simuler un paiement réussi
       await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Enregistrer la réservation dans Firestore
+      try {
+        await bookingService.createBooking({
+          eventId: bookingData.eventId.toString(),
+          userId: "anonyme", // Remplace par l'ID utilisateur si connecté
+          numberOfTickets: bookingData.numberOfTickets,
+          totalAmount: bookingData.totalPrice,
+          status: 'confirmed',
+          paymentStatus: 'paid',
+          paymentIntentId: '', // Ajoute l'ID Stripe si tu l'as
+          customerName: `${bookingData.firstName} ${bookingData.lastName}`,
+          customerEmail: bookingData.email,
+          customerPhone: bookingData.phone
+        });
+        console.log('✅ Réservation enregistrée dans Firestore');
+      } catch (firestoreError) {
+        console.error('❌ Erreur Firestore:', firestoreError);
+      }
 
       // Envoyer l'email de confirmation
       await sendEmailConfirmation(bookingData);

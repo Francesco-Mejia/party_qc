@@ -1,30 +1,65 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { eventService } from '../services/eventService';
+import { seedService } from '../services/seedService';
+import { Event } from '../types';
 import './Home.css';
 
 const Home: React.FC = () => {
-  const featuredEvents = [
-    {
-      id: 1,
-      title: "Soirée Électro Montréal",
-      date: "15 Décembre 2024",
-      time: "22:00 - 04:00",
-      location: "Club Électro, Montréal",
-      price: 45,
-      image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400",
-      description: "Une nuit inoubliable avec les meilleurs DJs de la scène électro montréalaise."
-    },
-    {
-      id: 2,
-      title: "Party Latino Québec",
-      date: "20 Décembre 2024",
-      time: "20:00 - 02:00",
-      location: "Salsa Club, Québec",
-      price: 35,
-      image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400",
-      description: "Rythmes latinos, cocktails exotiques et ambiance festive garantie."
-    }
-  ];
+  const [featuredEvents, setFeaturedEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadEvents = async () => {
+      try {
+        setLoading(true);
+        // Initialiser la base de données si elle est vide
+        await seedService.initializeIfEmpty();
+        
+        // Récupérer les événements à venir (limités à 6)
+        const events = await eventService.getUpcomingEvents(6);
+        setFeaturedEvents(events);
+      } catch (err) {
+        setError('Erreur lors du chargement des événements');
+        console.error('Erreur:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadEvents();
+  }, []);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('fr-CA', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="home">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Chargement des événements...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="home">
+        <div className="error-container">
+          <p>Erreur: {error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="home">
@@ -45,13 +80,13 @@ const Home: React.FC = () => {
             {featuredEvents.map((event) => (
               <div key={event.id} className="event-card">
                 <div className="event-image">
-                  <img src={event.image} alt={event.title} />
+                  <img src={event.imageUrl} alt={event.title} />
                   <div className="event-price">${event.price}</div>
                 </div>
                 <div className="event-content">
                   <h3>{event.title}</h3>
                   <div className="event-details">
-                    <p><strong>📅 Date:</strong> {event.date}</p>
+                    <p><strong>📅 Date:</strong> {formatDate(event.date)}</p>
                     <p><strong>🕒 Heure:</strong> {event.time}</p>
                     <p><strong>📍 Lieu:</strong> {event.location}</p>
                   </div>

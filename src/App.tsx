@@ -4,6 +4,9 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import './App.css';
 
+// Contextes
+import { AuthProvider } from './contexts/AuthContext';
+
 // Composants
 import Header from './components/Header';
 import Home from './components/Home';
@@ -17,27 +20,29 @@ const stripePromise = loadStripe('pk_test_51RgdWIFZux5diMvGTVeQNgfwoWhmzdwtlrVv7
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Header />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/event/:id" element={<EventDetails />} />
-            <Route path="/booking/:eventId" element={<BookingForm />} />
-            <Route 
-              path="/payment/:eventId/:bookingId" 
-              element={
-                <Elements stripe={stripePromise}>
-                  <PaymentForm />
-                </Elements>
-              } 
-            />
-            <Route path="/confirmation/:bookingId" element={<Confirmation />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div className="App">
+          <Header />
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/event/:id" element={<EventDetails />} />
+              <Route path="/booking/:eventId" element={<BookingForm />} />
+              <Route 
+                path="/payment/:eventId/:bookingId" 
+                element={
+                  <Elements stripe={stripePromise}>
+                    <PaymentForm />
+                  </Elements>
+                } 
+              />
+              <Route path="/confirmation/:bookingId" element={<Confirmation />} />
+            </Routes>
+          </main>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

@@ -77,6 +77,23 @@ const Home: React.FC = () => {
         <div className="container">
           <h2>Événements Vedettes</h2>
           <div className="events-grid">
+            {/* Événement spécial - CONTINENT À QUÉBEC */}
+            <Link to="/event/1" className="event-card special-card" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div className="event-image special-image">
+                <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800" alt="CONTINENT À QUÉBEC" />
+                <div className="event-price">$20</div>
+              </div>
+              <div className="event-content special-content">
+                <h3 className="special-title">CONTINENT À QUÉBEC (SOIRÉE AFRICAINE)</h3>
+                <div className="event-details">
+                  <p><strong>📅</strong> {formatDate("2025-08-10")} <strong>🕒</strong> 21:00 - 03:00</p>
+                  <p><strong>📍</strong> Centre communautaire de Québec</p>
+                </div>
+                <p className="event-description special-description">Une soirée africaine authentique avec musique traditionnelle et moderne, danse africaine. Ambiance festive et culturelle garantie.</p>
+              </div>
+            </Link>
+            
+            {/* Événements chargés depuis la base de données */}
             {featuredEvents.map((event) => (
               <div key={event.id} className="event-card">
                 <div className="event-image">

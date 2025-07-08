@@ -28,35 +28,20 @@ const EventDetails: React.FC = () => {
     const fetchEvent = () => {
       const events: Event[] = [
         {
-          id: 1,
-          title: "Soirée Électro Montréal",
-          date: "15 Décembre 2024",
-          time: "22:00 - 04:00",
-          location: "Club Électro, 1234 Rue Sainte-Catherine, Montréal, QC",
-          price: 5,
-          image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800",
-          description: "Une nuit inoubliable avec les meilleurs DJs de la scène électro montréalaise. Venez danser sur les rythmes les plus en vogue avec une ambiance unique et des performances exceptionnelles. Bar complet avec cocktails signature et zone VIP disponible.",
-          capacity: 500,
-          availableTickets: 127,
-          category: "Électro",
-          organizer: "Montréal Nightlife",
-          includes: ["Entrée générale", "Coat check", "Accès au bar", "Zone de danse"]
-        },
-        {
-          id: 2,
-          title: "Party Latino Québec",
-          date: "20 Décembre 2024",
-          time: "20:00 - 02:00",
-          location: "Salsa Club, 5678 Boulevard Laurier, Québec, QC",
-          price: 35,
+          id: 3,
+          title: "CONTINENT À QUÉBEC (SOIRÉE AFRICAINE)",
+          description: "Une soirée africaine authentique avec musique traditionnelle et moderne, danse africaine. Ambiance festive et culturelle garantie.",
+          date: "09 août 2025",
+          time: "21:00 - 03:00",
+          location: "Centre communautaire de Québec, 123 Avenue des Événements, Québec",
+          price: 20,
+          capacity: 180,
           image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800",
-          description: "Rythmes latinos, cocktails exotiques et ambiance festive garantie. Cours de salsa gratuit inclus, démonstrations de danse et musique live. Une soirée pour tous les âges avec une atmosphère chaleureuse et accueillante.",
-          capacity: 300,
-          availableTickets: 89,
-          category: "Latino",
-          organizer: "Québec Salsa Club",
-          includes: ["Entrée générale", "Cours de salsa", "Cocktail de bienvenue", "Démonstrations"]
-        }
+          category: "Africain",
+          organizer: "Groupe NETSTAT",
+          includes: ["Entrée générale", "Accès au bar", "Zone de danse"],
+          availableTickets: 180
+      }
       ];
 
       const foundEvent = events.find(e => e.id === parseInt(id || '1'));
@@ -158,13 +143,6 @@ const EventDetails: React.FC = () => {
                       <p>{event.location}</p>
                     </div>
                   </div>
-                  <div className="detail-item">
-                    <span className="icon">🎫</span>
-                    <div>
-                      <strong>Places disponibles</strong>
-                      <p>{event.availableTickets} sur {event.capacity}</p>
-                    </div>
-                  </div>
                 </div>
 
                 {event.availableTickets > 0 ? (
@@ -180,7 +158,6 @@ const EventDetails: React.FC = () => {
                 <div className="booking-note">
                   <p>💳 Paiement sécurisé par Stripe</p>
                   <p>📧 Billet envoyé par email</p>
-                  <p>🔄 Annulation gratuite jusqu'à 24h avant</p>
                 </div>
               </div>
             </div>

@@ -3,11 +3,15 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import AuthModal from './AuthModal';
 import './Header.css';
+import { FaBars, FaTimes } from 'react-icons/fa';
+const BarsIcon = FaBars as unknown as React.FC<{ size?: number }>;
+const TimesIcon = FaTimes as unknown as React.FC<{ size?: number }>;
 
 const Header: React.FC = () => {
   const { currentUser, userData, logout } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleAuthClick = (mode: 'login' | 'register') => {
     setAuthMode(mode);
@@ -29,11 +33,17 @@ const Header: React.FC = () => {
           <Link to="/" className="logo">
             <h1>🎉 Party QC</h1>
           </Link>
-          <nav className="nav">
+          <div className="header-right">
+            <span className="user-name-mobile">{currentUser ? `Bonjour, ${userData?.displayName || currentUser.email}` : ''}</span>
+            <button className="hamburger" onClick={() => setMobileMenuOpen(true)} aria-label="Ouvrir le menu">
+              <BarsIcon size={24} />
+            </button>
+          </div>
+          <nav className="nav desktop-nav">
             <Link to="/" className="nav-link">Accueil</Link>
             <Link to="/event/1" className="nav-link">Événements</Link>
           </nav>
-          <div className="auth-section">
+          <div className="auth-section desktop-auth">
             {currentUser ? (
               <div className="user-menu">
                 <span className="user-name">Bonjour, {userData?.displayName || currentUser.email}</span>
@@ -59,6 +69,26 @@ const Header: React.FC = () => {
             )}
           </div>
         </div>
+        {/* Menu mobile overlay */}
+        {mobileMenuOpen && (
+          <div className="mobile-menu mobile-menu-open">
+            <button className="mobile-menu-close" onClick={() => setMobileMenuOpen(false)} aria-label="Fermer le menu">
+              <TimesIcon size={24} />
+            </button>
+            <nav className="mobile-nav">
+              <Link to="/" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Accueil</Link>
+              <Link to="/event/1" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Événements</Link>
+              {currentUser ? (
+                <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="logout-btn">Déconnexion</button>
+              ) : (
+                <>
+                  <button onClick={() => { handleAuthClick('login'); setMobileMenuOpen(false); }} className="auth-btn login-btn">Connexion</button>
+                  <button onClick={() => { handleAuthClick('register'); setMobileMenuOpen(false); }} className="auth-btn register-btn">Inscription</button>
+                </>
+              )}
+            </nav>
+          </div>
+        )}
       </header>
       
       <AuthModal 

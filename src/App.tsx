@@ -16,7 +16,7 @@ import PaymentForm from './components/PaymentForm';
 import Confirmation from './components/Confirmation';
 
 // Configuration Stripe (remplacez par votre clé publique)
-const stripePromise = loadStripe('pk_test_51RgdWIFZux5diMvGTVeQNgfwoWhmzdwtlrVv7t2425mZUiDIoGCTviea90KlCyemdSZYWh8dBAfiZuGhrRZXiC2L001BBjP1ix');
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '');
 
 function App() {
   return (

@@ -52,24 +52,14 @@ const BookingForm: React.FC = () => {
       const events: Event[] = [
         {
           id: 1,
-          title: "Soirée Électro Montréal",
-          date: "15 Décembre 2024",
-          time: "22:00 - 04:00",
+          title: "CONTINENT À QUÉBEC (SOIRÉE AFRICAINE)",
+          date: "09 août 2025",
+          time: "21:00 - 03:00",
           location: "Club Électro, Montréal",
-          price: 5,
-          image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400",
+          price: 20,
+          image: "../Images/AMAPIANO.jpg",
           availableTickets: 127
         },
-        {
-          id: 2,
-          title: "Party Latino Québec",
-          date: "20 Décembre 2024",
-          time: "20:00 - 02:00",
-          location: "Salsa Club, Québec",
-          price: 35,
-          image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400",
-          availableTickets: 89
-        }
       ];
 
       const foundEvent = events.find(e => e.id === parseInt(eventId || '1'));
@@ -191,8 +181,8 @@ const BookingForm: React.FC = () => {
                 <p><strong>📅 Date:</strong> {event.date}</p>
                 <p><strong>🕒 Heure:</strong> {event.time}</p>
                 <p><strong>📍 Lieu:</strong> {event.location}</p>
-                <p><strong>💰 Prix:</strong> ${event.price} par billet</p>
-                <p><strong>🎫 Disponible:</strong> {event.availableTickets} places</p>
+                <p><strong>🏷️ Prix:</strong> ${event.price} par billet</p>
+                {/*   <p><strong>🎫 Disponible:</strong> {event.availableTickets} places</p> */}
               </div>
             </div>
           </div>

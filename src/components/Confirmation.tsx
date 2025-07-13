@@ -16,7 +16,7 @@ interface BookingData {
 }
 
 const Confirmation: React.FC = () => {
-  const { bookingId } = useParams<{ bookingId: string }>();
+  //const { bookingId } = useParams<{ bookingId: string }>();
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
   const [loading, setLoading] = useState(true);
 

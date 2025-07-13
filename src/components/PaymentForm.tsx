@@ -20,7 +20,7 @@ interface BookingData {
 }
 
 const PaymentForm: React.FC = () => {
-  const { eventId, bookingId } = useParams<{ eventId: string; bookingId: string }>();
+  const { eventId } = useParams<{ eventId: string; bookingId: string }>();
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
@@ -57,7 +57,7 @@ const PaymentForm: React.FC = () => {
 
     try {
       // Simuler le processus de paiement Stripe
-      const { error: stripeError, paymentMethod } = await stripe.createPaymentMethod({
+      const { error: stripeError } = await stripe.createPaymentMethod({
         type: 'card',
         card: elements.getElement(CardElement)!,
         billing_details: {
